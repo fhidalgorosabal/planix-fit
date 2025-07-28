@@ -1,10 +1,22 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, Observable } from 'rxjs';
+import { DayRoutine, Exercise } from './interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoutineDetailsSerice {
-  getRoutineDetails(day: string): string {
-    return day;
+  private httpClient = inject(HttpClient);
+
+  getRoutineDetails(day: string): Observable<Exercise[] | undefined> {
+    return this.httpClient
+      .get<DayRoutine[]>('data/routine-details-data.json')
+      .pipe(
+        map(
+          (data: DayRoutine[]) =>
+            data.find((routine) => routine.day === day)?.list
+        )
+      );
   }
 }

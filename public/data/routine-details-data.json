@@ -1,0 +1,87 @@
+[
+  {
+    "day": "1",
+    "list": [
+      {
+        "id": "1",
+        "name": "Calentamiento",
+        "reps": 5,
+        "sets": 1,
+        "unit": "minutos"
+      },
+      { "id": "2", "name": "Plancha", "reps": 25, "sets": 4 },
+      { "id": "3", "name": "Tríceps con mancuerna", "reps": 15, "sets": 3 },
+      { "id": "4", "name": "Sentadillas", "reps": 20, "sets": 3 }
+    ]
+  },
+  {
+    "day": "2",
+    "list": [
+      {
+        "id": "1",
+        "name": "Calentamiento",
+        "reps": 5,
+        "sets": 1,
+        "unit": "minutos"
+      },
+      { "id": "2", "name": "Dominadas en barra fija", "reps": 12, "sets": 4 },
+      {
+        "id": "3",
+        "name": "Curl de bíceps con mancuernas",
+        "reps": 12,
+        "sets": 3
+      },
+      { "id": "4", "name": "Abdominales", "reps": 25, "sets": 3 }
+    ]
+  },
+  {
+    "day": "3",
+    "list": [
+      {
+        "id": "1",
+        "name": "Calentamiento",
+        "reps": 5,
+        "sets": 1,
+        "unit": "minutos"
+      },
+      { "id": "2", "name": "Plancha", "reps": 25, "sets": 4 },
+      { "id": "3", "name": "Tríceps con mancuerna", "reps": 15, "sets": 3 },
+      { "id": "4", "name": "Sentadillas", "reps": 20, "sets": 3 }
+    ]
+  },
+  {
+    "day": "4",
+    "list": [
+      {
+        "id": "1",
+        "name": "Calentamiento",
+        "reps": 5,
+        "sets": 1,
+        "unit": "minutos"
+      },
+      { "id": "2", "name": "Dominadas en barra fija", "reps": 12, "sets": 4 },
+      {
+        "id": "3",
+        "name": "Curl de bíceps con mancuernas",
+        "reps": 12,
+        "sets": 3
+      },
+      { "id": "4", "name": "Abdominales", "reps": 25, "sets": 3 }
+    ]
+  },
+  {
+    "day": "5",
+    "list": [
+      {
+        "id": "1",
+        "name": "Calentamiento",
+        "reps": 5,
+        "sets": 1,
+        "unit": "minutos"
+      },
+      { "id": "2", "name": "Plancha", "reps": 25, "sets": 4 },
+      { "id": "3", "name": "Tríceps con mancuerna", "reps": 15, "sets": 3 },
+      { "id": "4", "name": "Sentadillas", "reps": 20, "sets": 3 }
+    ]
+  }
+]

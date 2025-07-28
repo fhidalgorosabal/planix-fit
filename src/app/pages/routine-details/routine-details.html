@@ -1,1 +1,23 @@
-<p>routine {{ data }}</p>
+<div
+  class="bg-red-50 shadow-md p-4 sm:rounded-none sm:h-full md:rounded-2xl md:max-w-xl md:mx-auto md:my-6 md:h-auto w-full h-screen overflow-auto transition-all"
+>
+  <h2 class="text-xl font-semibold text-center mb-4 text-red-700">
+    Rutina del {{ getDayDate() | date : "EEEE" }}
+  </h2>
+
+  <ul class="divide-y divide-gray-200">
+    @for (exercise of exercises$ | async; track exercise.id) {
+    <li class="py-3 flex justify-between items-center">
+      <div>
+        <p class="text-base font-medium text-red-700">
+          {{ exercise.name }}
+        </p>
+        <p class="text-sm text-gray-500">
+          {{ exercise.reps }} {{ exercise.unit || "reps" }} •
+          {{ exercise.sets }} {{ exercise.sets > 1 ? "series" : "serie" }}
+        </p>
+      </div>
+    </li>
+    }
+  </ul>
+</div>
