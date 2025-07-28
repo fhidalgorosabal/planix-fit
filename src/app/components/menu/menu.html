@@ -1,12 +1,11 @@
 <nav
-  class="fixed top-0 left-0 w-full md:w-2/3 h-full bg-white shadow-lg z-50 p-4"
+  class="fixed top-0 left-0 w-full md:w-2/3 h-full bg-white shadow-lg z-50 py-4"
 >
   <button
     class="absolute top-4 right-4 text-gray-700 cursor-pointer"
     (click)="toggleMenu()"
     aria-label="Cerrar menú"
   >
-    <!-- Icono SVG X -->
     <svg
       width="24"
       height="24"
@@ -18,9 +17,22 @@
       <line x1="6" y1="18" x2="18" y2="6" />
     </svg>
   </button>
-  <ul class="mt-12">
-    <li class="mb-2"><a href="#" class="text-blue-600">Inicio</a></li>
-    <li class="mb-2"><a href="#" class="text-blue-600">Perfil</a></li>
-    <li><a href="#" class="text-blue-600">Ajustes</a></li>
+  <h3 class="px-4">Días de rutina</h3>
+  <ul class="mt-4 flex flex-col">
+    @for(day of routineDays; track day.id) { @if (day.isActive) {
+    <li>
+      <a
+        href="#"
+        [ngClass]="{
+          'border-b': day.id !== 1,
+          'border-y': day.id === 1,
+          'border-gray-300': true
+        }"
+        class="block w-full px-4 py-3 text-red-600 font-medium hover:bg-red-100 focus:bg-red-200 transition"
+      >
+        {{ day.name }}
+      </a>
+    </li>
+    } }
   </ul>
 </nav>
