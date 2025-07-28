@@ -1,25 +1,25 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { NgClass } from '@angular/common';
-import { RoutineDays } from '../../interface/RoutineDays';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { Observable } from 'rxjs';
+import { RoutineDays } from '../../interface/routine-days';
+import { MenuService } from '../../services/menu/menu';
 
 @Component({
   selector: 'app-menu',
-  imports: [NgClass],
+  imports: [AsyncPipe, NgClass],
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
 export class Menu {
+  private menuService = inject(MenuService);
+
   @Output() menuOpen = new EventEmitter<boolean>(false);
 
-  routineDays: RoutineDays[] = [
-    { id: 1, name: 'Lunes', isActive: true },
-    { id: 2, name: 'Martes', isActive: true },
-    { id: 3, name: 'Miércoles', isActive: true },
-    { id: 4, name: 'Jueves', isActive: true },
-    { id: 5, name: 'Viernes', isActive: true },
-    { id: 6, name: 'Sábado', isActive: false },
-    { id: 7, name: 'Domingo', isActive: false },
-  ];
+  routineDays$: Observable<RoutineDays[]>;
+
+  constructor() {
+    this.routineDays$ = this.menuService.getMenuItems();
+  }
 
   toggleMenu() {
     this.menuOpen.emit(!this.menuOpen);

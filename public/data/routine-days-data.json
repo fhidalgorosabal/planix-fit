@@ -1,0 +1,9 @@
+[
+  { "id": 1, "name": "Lunes", "isActive": true },
+  { "id": 2, "name": "Martes", "isActive": true },
+  { "id": 3, "name": "Miércoles", "isActive": true },
+  { "id": 4, "name": "Jueves", "isActive": true },
+  { "id": 5, "name": "Viernes", "isActive": true },
+  { "id": 6, "name": "Sábado", "isActive": false },
+  { "id": 7, "name": "Domingo", "isActive": false }
+]
