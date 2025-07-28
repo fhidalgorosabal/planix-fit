@@ -1,22 +1,28 @@
-<header class="flex items-center px-4 py-2 bg-red-600 relative">
+<header
+  class="flex items-center px-6 py-4 bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-md relative z-40"
+>
   <button
-    class="mr-3 text-white focus:outline-none cursor-pointer"
+    class="mr-4 text-white hover:text-red-100 transition-colors duration-200 focus:outline-none"
     (click)="menuOpen = !menuOpen"
     aria-label="Abrir menú"
   >
     <svg
-      width="24"
-      height="24"
+      width="28"
+      height="28"
       fill="none"
       stroke="currentColor"
       stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
     >
       <path d="M4 6h16M4 12h16M4 18h16" />
     </svg>
   </button>
-  <h1 class="text-white text-lg font-semibold">
+
+  <h1 class="text-white text-2xl font-semibold tracking-wide">
     <ng-content></ng-content>
   </h1>
+
   @if (menuOpen) {
   <app-menu (menuOpen)="toggleMenu()"></app-menu>
   }
