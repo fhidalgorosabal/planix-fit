@@ -5,7 +5,6 @@ import { Menu } from '../menu/menu';
   selector: 'app-header',
   imports: [Menu],
   templateUrl: './header.html',
-  styleUrl: './header.css',
 })
 export class Header {
   menuOpen = false;

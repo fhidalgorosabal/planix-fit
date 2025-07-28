@@ -20,15 +20,16 @@
   <h3 class="px-4">Días de rutina</h3>
   <ul class="mt-4 flex flex-col">
     @for(day of routineDays$ | async; track day.id) { @if (day.isActive) {
-    <li>
+    <li (click)="toggleMenu()">
       <a
-        href="#"
+        [routerLink]="['/routine-details', day.id]"
+        [routerLinkActive]="['bg-red-200']"
         [ngClass]="{
           'border-b': day.id !== 1,
           'border-y': day.id === 1,
           'border-gray-300': true
         }"
-        class="block w-full px-4 py-3 text-red-600 font-medium hover:bg-red-100 focus:bg-red-200 transition"
+        class="block w-full px-4 py-3 text-red-600 font-medium hover:bg-red-100 transition"
       >
         {{ day.name }}
       </a>
