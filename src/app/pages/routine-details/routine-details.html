@@ -5,19 +5,19 @@
     Rutina del {{ dayDate() | date : "EEEE" }}
   </h2>
 
+  @if (isGlobalResting()) {
+  <div class="text-center text-blue-500 font-semibold mb-4">
+    🕒 Descanso entre ejercicios: {{ globalCountdown() }}s
+  </div>
+  }
+
   <ul class="divide-y divide-gray-200">
     @for (exercise of exercises(); track exercise.id) {
-    <li class="py-3 flex justify-between items-center">
-      <div>
-        <p class="text-base font-medium text-red-700">
-          {{ exercise.name }}
-        </p>
-        <p class="text-sm text-gray-500">
-          {{ exercise.reps }} {{ exercise.unit || "reps" }} •
-          {{ exercise.sets }} {{ exercise.sets > 1 ? "series" : "serie" }}
-        </p>
-      </div>
-    </li>
+    <app-exercise-item
+      [exercise]="exercise"
+      [isGlobalResting]="isGlobalResting()"
+      (exerciseCompleted)="onExerciseCompleted()"
+    />
     }
   </ul>
 </div>

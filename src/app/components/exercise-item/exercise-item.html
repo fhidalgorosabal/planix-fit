@@ -1,0 +1,45 @@
+<li
+  (click)="!isGlobalResting && toggleExpand()"
+  class="py-3 flex flex-col cursor-pointer border-b border-gray-200"
+  [class.opacity-50]="isGlobalResting"
+>
+  <div class="flex justify-between items-center">
+    <div>
+      <p class="text-base font-medium text-red-700">
+        {{ exercise.name }}
+      </p>
+
+      <p class="text-sm text-gray-500">
+        {{ exercise.reps }} {{ exercise.unit || "reps" }} • {{ exercise.sets }}
+        {{ exercise.sets > 1 ? "series" : "serie" }}
+      </p>
+    </div>
+
+    @if (!expanded()) { ⬇️ } @else {⬆️}
+  </div>
+
+  @if (expanded()) {
+  <div class="mt-4 pl-2 pr-4 text-sm text-gray-700">
+    @if (!isCompleted()) {
+    <p>Serie actual: {{ currentSet() }} / {{ exercise.sets }}</p>
+
+    @if (isResting()) {
+    <div class="text-blue-500 font-semibold mt-2">
+      🕒 Descanso: {{ countdown() }}s
+    </div>
+    } @else {
+    <button
+      (click)="!isGlobalResting && completeSet(); $event.stopPropagation()"
+      class="mt-3 bg-red-200 text-red-900 px-4 py-1 rounded shadow hover:bg-red-300 disabled:opacity-50"
+      [disabled]="isGlobalResting"
+    >
+      ✅ Completar serie
+    </button>
+    } } @else {
+    <p class="text-green-600 font-semibold mt-2">
+      ✅ ¡Ejercicio completado! Pasa al siguiente.
+    </p>
+    }
+  </div>
+  }
+</li>

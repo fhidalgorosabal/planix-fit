@@ -7,11 +7,34 @@
         "name": "Calentamiento",
         "reps": 5,
         "sets": 1,
-        "unit": "minutos"
+        "unit": "minutos",
+        "restTime": 0,
+        "restTimeSet": 5
       },
-      { "id": "2", "name": "Plancha", "reps": 25, "sets": 4 },
-      { "id": "3", "name": "Tríceps con mancuerna", "reps": 15, "sets": 3 },
-      { "id": "4", "name": "Sentadillas", "reps": 20, "sets": 3 }
+      {
+        "id": "2",
+        "name": "Plancha",
+        "reps": 25,
+        "sets": 4,
+        "restTime": 60,
+        "restTimeSet": 120
+      },
+      {
+        "id": "3",
+        "name": "Tríceps con mancuerna",
+        "reps": 15,
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
+      },
+      {
+        "id": "4",
+        "name": "Sentadillas",
+        "reps": 20,
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
+      }
     ]
   },
   {
@@ -22,16 +45,34 @@
         "name": "Calentamiento",
         "reps": 5,
         "sets": 1,
-        "unit": "minutos"
+        "unit": "minutos",
+        "restTime": 0,
+        "restTimeSet": 5
       },
-      { "id": "2", "name": "Dominadas en barra fija", "reps": 12, "sets": 4 },
+      {
+        "id": "2",
+        "name": "Dominadas en barra fija",
+        "reps": 12,
+        "sets": 4,
+        "restTime": 60,
+        "restTimeSet": 120
+      },
       {
         "id": "3",
         "name": "Curl de bíceps con mancuernas",
         "reps": 12,
-        "sets": 3
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
       },
-      { "id": "4", "name": "Abdominales", "reps": 25, "sets": 3 }
+      {
+        "id": "4",
+        "name": "Abdominales",
+        "reps": 25,
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
+      }
     ]
   },
   {
@@ -42,11 +83,34 @@
         "name": "Calentamiento",
         "reps": 5,
         "sets": 1,
-        "unit": "minutos"
+        "unit": "minutos",
+        "restTime": 0,
+        "restTimeSet": 5
       },
-      { "id": "2", "name": "Plancha", "reps": 25, "sets": 4 },
-      { "id": "3", "name": "Tríceps con mancuerna", "reps": 15, "sets": 3 },
-      { "id": "4", "name": "Sentadillas", "reps": 20, "sets": 3 }
+      {
+        "id": "2",
+        "name": "Plancha",
+        "reps": 25,
+        "sets": 4,
+        "restTime": 60,
+        "restTimeSet": 120
+      },
+      {
+        "id": "3",
+        "name": "Tríceps con mancuerna",
+        "reps": 15,
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
+      },
+      {
+        "id": "4",
+        "name": "Sentadillas",
+        "reps": 20,
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
+      }
     ]
   },
   {
@@ -57,16 +121,34 @@
         "name": "Calentamiento",
         "reps": 5,
         "sets": 1,
-        "unit": "minutos"
+        "unit": "minutos",
+        "restTime": 0,
+        "restTimeSet": 5
       },
-      { "id": "2", "name": "Dominadas en barra fija", "reps": 12, "sets": 4 },
+      {
+        "id": "2",
+        "name": "Dominadas en barra fija",
+        "reps": 12,
+        "sets": 4,
+        "restTime": 60,
+        "restTimeSet": 120
+      },
       {
         "id": "3",
         "name": "Curl de bíceps con mancuernas",
         "reps": 12,
-        "sets": 3
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
       },
-      { "id": "4", "name": "Abdominales", "reps": 25, "sets": 3 }
+      {
+        "id": "4",
+        "name": "Abdominales",
+        "reps": 25,
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
+      }
     ]
   },
   {
@@ -77,11 +159,34 @@
         "name": "Calentamiento",
         "reps": 5,
         "sets": 1,
-        "unit": "minutos"
+        "unit": "minutos",
+        "restTime": 0,
+        "restTimeSet": 5
       },
-      { "id": "2", "name": "Plancha", "reps": 25, "sets": 4 },
-      { "id": "3", "name": "Tríceps con mancuerna", "reps": 15, "sets": 3 },
-      { "id": "4", "name": "Sentadillas", "reps": 20, "sets": 3 }
+      {
+        "id": "2",
+        "name": "Plancha",
+        "reps": 25,
+        "sets": 4,
+        "restTime": 60,
+        "restTimeSet": 120
+      },
+      {
+        "id": "3",
+        "name": "Tríceps con mancuerna",
+        "reps": 15,
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
+      },
+      {
+        "id": "4",
+        "name": "Sentadillas",
+        "reps": 20,
+        "sets": 3,
+        "restTime": 60,
+        "restTimeSet": 120
+      }
     ]
   }
 ]

@@ -4,6 +4,8 @@ export interface Exercise {
   reps: number;
   sets: number;
   unit?: string;
+  restTime: number;
+  restTimeSet: number;
 }
 
 export interface DayRoutine {
