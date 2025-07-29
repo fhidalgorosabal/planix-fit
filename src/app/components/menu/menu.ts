@@ -2,8 +2,8 @@ import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Observable } from 'rxjs';
-import { RoutineDays } from './interface';
-import { MenuService } from './service';
+import { MenuApi } from './menu-api';
+import { RoutineDays } from './menu-model';
 
 @Component({
   selector: 'app-menu',
@@ -11,14 +11,14 @@ import { MenuService } from './service';
   templateUrl: './menu.html',
 })
 export class Menu {
-  private menuService = inject(MenuService);
+  private menuApi = inject(MenuApi);
 
   @Output() menuOpen = new EventEmitter<boolean>(false);
 
   routineDays$: Observable<RoutineDays[]>;
 
   constructor() {
-    this.routineDays$ = this.menuService.getMenuItems();
+    this.routineDays$ = this.menuApi.getMenuItems();
   }
 
   toggleMenu() {

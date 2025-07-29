@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { DayRoutine, Exercise } from './interface';
+import { DayRoutine, Exercise } from './routine-details-model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class RoutineDetailsSerice {
+export class RoutineDetailsApi {
   private httpClient = inject(HttpClient);
 
   getRoutineDetails(day: string): Observable<Exercise[] | undefined> {

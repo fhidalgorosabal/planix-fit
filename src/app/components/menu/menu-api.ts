@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RoutineDays } from './interface';
+import { RoutineDays } from './menu-model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MenuService {
+export class MenuApi {
   private httpClient = inject(HttpClient);
 
   getMenuItems(): Observable<RoutineDays[]> {

@@ -1,18 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { RoutineDetailsSerice } from './service';
-import { Observable } from 'rxjs';
-import { DayRoutine, Exercise } from './interface';
+import { Component, inject } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { RoutineDetailsApi } from './routine-details-api';
+import { Observable } from 'rxjs';
+import { Exercise } from './routine-details-model';
 
 @Component({
-  selector: 'app-routine-details',
   imports: [AsyncPipe, DatePipe],
   templateUrl: './routine-details.html',
-  styleUrl: './routine-details.css',
 })
 export class RoutineDetails {
-  private routineDetailsSerice = inject(RoutineDetailsSerice);
+  private routineDetailsApi = inject(RoutineDetailsApi);
   private route = inject(ActivatedRoute);
   day: string = '';
 
@@ -21,11 +19,16 @@ export class RoutineDetails {
   constructor() {
     this.route.paramMap.subscribe((params) => {
       this.day = params.get('day') || '1';
-      this.exercises$ = this.routineDetailsSerice.getRoutineDetails(this.day);
+      this.exercises$ = this.routineDetailsApi.getRoutineDetails(this.day);
     });
   }
 
   getDayDate(): Date {
-    return new Date(2025, 6, parseInt(this.day, 10));
+    const today = new Date();
+    return new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      parseInt(this.day, 10) - 1
+    );
   }
 }
