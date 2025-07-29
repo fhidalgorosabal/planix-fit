@@ -1,34 +1,61 @@
-import { Component, inject } from '@angular/core';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnDestroy,
+  signal,
+  WritableSignal,
+} from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { RoutineDetailsApi } from './routine-details-api';
-import { Observable } from 'rxjs';
 import { Exercise } from './routine-details-model';
 
 @Component({
-  imports: [AsyncPipe, DatePipe],
+  standalone: true,
+  selector: 'app-routine-details',
+  imports: [DatePipe],
   templateUrl: './routine-details.html',
 })
-export class RoutineDetails {
-  private routineDetailsApi = inject(RoutineDetailsApi);
+export class RoutineDetails implements OnDestroy {
   private route = inject(ActivatedRoute);
-  day: string = '';
+  private routineDetailsApi = inject(RoutineDetailsApi);
 
-  exercises$: Observable<Exercise[] | undefined> = new Observable();
+  day = signal('1');
+
+  exercises: WritableSignal<Exercise[]> = signal([]);
+
+  destroy$ = new Subject<void>();
 
   constructor() {
-    this.route.paramMap.subscribe((params) => {
-      this.day = params.get('day') || '1';
-      this.exercises$ = this.routineDetailsApi.getRoutineDetails(this.day);
+    effect(() => {
+      const dayValue = this.day();
+      this.routineDetailsApi
+        .getRoutineDetails(dayValue)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (data) => this.exercises.set(data ?? []),
+        });
+
+      this.route.paramMap.subscribe((params) => {
+        this.day.set(params.get('day') || '1');
+      });
     });
   }
 
-  getDayDate(): Date {
+  dayDate = computed(() => {
     const today = new Date();
     return new Date(
       today.getFullYear(),
       today.getMonth(),
-      parseInt(this.day, 10) - 1
+      parseInt(this.day(), 10) - 1
     );
+  });
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

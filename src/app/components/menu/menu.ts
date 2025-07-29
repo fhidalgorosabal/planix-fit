@@ -1,29 +1,49 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { AsyncPipe, NgClass } from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  Output,
+  signal,
+  WritableSignal,
+} from '@angular/core';
+import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { MenuApi } from './menu-api';
 import { RoutineDays } from './menu-model';
 
 @Component({
   selector: 'app-menu',
-  imports: [AsyncPipe, NgClass, RouterLink, RouterLinkActive],
+  imports: [NgClass, RouterLink, RouterLinkActive],
   templateUrl: './menu.html',
 })
-export class Menu {
+export class Menu implements OnDestroy {
   private menuApi = inject(MenuApi);
 
-  @Output() menuOpen = new EventEmitter<boolean>(false);
+  @Output() menuOpen = new EventEmitter<boolean>();
 
-  routineDays$: Observable<RoutineDays[]>;
+  routineDays: WritableSignal<RoutineDays[]> = signal([]);
+
+  destroy$ = new Subject<void>();
 
   constructor() {
-    this.routineDays$ = this.menuApi.getMenuItems();
+    this.menuApi
+      .getMenuItems()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => this.routineDays.set(data ?? []),
+      });
   }
 
   toggleMenu() {
     setTimeout(() => {
       this.menuOpen.emit(!this.menuOpen);
     }, 100);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
