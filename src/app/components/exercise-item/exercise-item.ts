@@ -8,11 +8,12 @@ import {
   OnInit,
 } from '@angular/core';
 import { Exercise } from '../../pages/routine-details/routine-details-model';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-exercise-item',
   standalone: true,
-  imports: [],
+  imports: [NgClass],
   templateUrl: './exercise-item.html',
 })
 export class ExerciseItem implements OnInit {

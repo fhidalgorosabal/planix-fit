@@ -5,7 +5,13 @@
 >
   <div class="flex justify-between items-center">
     <div>
-      <p class="text-base font-medium text-red-700">
+      <p
+        [ngClass]="{
+          'text-red-700': !isCompleted(),
+          'text-green-700': isCompleted()
+        }"
+        class="text-base font-medium"
+      >
         {{ exercise.name }}
       </p>
 
