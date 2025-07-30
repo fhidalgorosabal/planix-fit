@@ -11,6 +11,7 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { RoutineDetailsApi } from './routine-details-api';
+import { SoundApi } from '../../sound/sound-api';
 import { ExerciseItem } from '../../components/exercise-item/exercise-item';
 import { Exercise } from './routine-details-model';
 
@@ -23,6 +24,7 @@ import { Exercise } from './routine-details-model';
 export class RoutineDetails implements OnDestroy {
   private route = inject(ActivatedRoute);
   private routineDetailsApi = inject(RoutineDetailsApi);
+  private soundApi = inject(SoundApi);
 
   day = signal('1');
   exercises: WritableSignal<Exercise[]> = signal([]);
@@ -69,6 +71,7 @@ export class RoutineDetails implements OnDestroy {
       this.startGlobalRestTimer(() => {
         this.isGlobalResting.set(false);
         this.currentExerciseIndex.set(nextIndex);
+        this.soundApi.play('sounds/sound-1.mp3', 3);
       });
     }
   }

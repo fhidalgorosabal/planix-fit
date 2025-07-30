@@ -6,9 +6,11 @@ import {
   signal,
   computed,
   OnInit,
+  inject,
 } from '@angular/core';
-import { Exercise } from '../../pages/routine-details/routine-details-model';
 import { NgClass } from '@angular/common';
+import { Exercise } from '../../pages/routine-details/routine-details-model';
+import { SoundApi } from '../../sound/sound-api';
 
 @Component({
   selector: 'app-exercise-item',
@@ -17,6 +19,8 @@ import { NgClass } from '@angular/common';
   templateUrl: './exercise-item.html',
 })
 export class ExerciseItem implements OnInit {
+  private soundApi = inject(SoundApi);
+
   @Input({ required: true }) exercise!: Exercise;
   @Input() isGlobalResting: boolean = false;
   @Output() exerciseCompleted = new EventEmitter<void>();
@@ -63,6 +67,7 @@ export class ExerciseItem implements OnInit {
         clearInterval(this.intervalId);
         this.isResting.set(false);
         this.currentSet.update((n) => n + 1);
+        this.soundApi.play('sounds/sound-1.mp3', 3);
       }
     }, 1000);
   }
