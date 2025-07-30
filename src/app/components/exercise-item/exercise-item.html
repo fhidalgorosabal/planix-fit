@@ -21,7 +21,7 @@
       </p>
     </div>
 
-    @if (!expanded()) { ⬇️ } @else {⬆️}
+    @if (!expanded()) { 🔽 } @else { 🔼 }
   </div>
 
   @if (expanded()) {
@@ -32,7 +32,7 @@
     </div>
     } @else {
     <div class="flex items-center justify-between">
-      <p>✅ Comienza la serie {{ currentSet() }} de {{ exercise.sets }}</p>
+      <p>🏋️ Comienza la serie {{ currentSet() }} de {{ exercise.sets }}</p>
       <button
         (click)="!isGlobalResting && completeSet(); $event.stopPropagation()"
         class="bg-red-200 text-red-900 px-4 py-1 rounded shadow hover:bg-red-300 disabled:opacity-50 cursor-pointer"
