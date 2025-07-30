@@ -7,15 +7,14 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { MenuApi } from './menu-api';
-import { RoutineDays } from './menu-model';
+import { MenuItem } from './menu-model';
 
 @Component({
   selector: 'app-menu',
-  imports: [NgClass, RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './menu.html',
 })
 export class Menu implements OnDestroy {
@@ -23,7 +22,7 @@ export class Menu implements OnDestroy {
 
   @Output() menuOpen = new EventEmitter<boolean>();
 
-  routineDays: WritableSignal<RoutineDays[]> = signal([]);
+  routineDays: WritableSignal<MenuItem[]> = signal([]);
 
   destroy$ = new Subject<void>();
 
