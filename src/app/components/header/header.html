@@ -2,7 +2,7 @@
   class="flex items-center px-6 py-4 bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-md relative z-40"
 >
   <button
-    class="mr-4 text-white hover:text-red-100 transition-colors duration-200 focus:outline-none"
+    class="mr-4 text-white hover:text-red-100 transition-colors duration-200 focus:outline-none cursor-pointer"
     (click)="toggleMenu()"
     aria-label="Abrir menú"
   >
@@ -20,7 +20,7 @@
   </button>
 
   <h1
-    class="text-white text-2xl font-semibold tracking-wide"
+    class="text-white text-2xl font-semibold tracking-wide cursor-pointer"
     (click)="toHome()"
   >
     <ng-content></ng-content>
