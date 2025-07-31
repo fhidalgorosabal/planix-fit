@@ -42,6 +42,26 @@ export class DayApi {
     });
   }
 
+  toggleDayActive(dayId: number): void {
+    const stored = localStorage.getItem(this.STORAGE_KEY);
+    if (!stored) return;
+
+    let days: Day[];
+    try {
+      days = JSON.parse(stored) as Day[];
+    } catch (e) {
+      console.error('Error al parsear datos del localStorage:', e);
+      return;
+    }
+
+    const updatedDays = days.map((day) =>
+      day.id === dayId ? { ...day, isActive: !day.isActive } : day
+    );
+
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedDays));
+    this.cache.set(updatedDays);
+  }
+
   refreshSignal(): Signal<Day[]> {
     localStorage.removeItem(this.STORAGE_KEY);
     this.cache.set(null);

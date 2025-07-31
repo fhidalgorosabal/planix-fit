@@ -18,6 +18,13 @@ export const routes: Routes = [
       import('./pages/routine-setup/routine-setup').then((c) => c.RoutineSetup),
   },
   {
+    path: 'routine-details-setup/:day',
+    loadComponent: () =>
+      import('./pages/routine-details-setup/routine-details-setup').then(
+        (c) => c.RoutineDetailsSetup
+      ),
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },

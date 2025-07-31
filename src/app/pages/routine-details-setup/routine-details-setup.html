@@ -1,0 +1,25 @@
+<div
+  class="bg-red-50 shadow-md p-4 sm:rounded-none sm:h-full md:rounded-2xl md:max-w-xl md:mx-auto md:my-6 md:h-auto w-full h-screen overflow-auto transition-all"
+>
+  <div class="flex items-center">
+    <svg
+      class="w-8 h-8 mr-3 text-red-700 cursor-pointer"
+      data-slot="icon"
+      fill="none"
+      stroke-width="1.5"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M15.75 19.5 8.25 12l7.5-7.5"
+      ></path>
+    </svg>
+    <h2 class="text-xl font-semibold text-red-700">
+      Configurar rutina del {{ dayDate() | date : "EEEE" }}
+    </h2>
+  </div>
+</div>
