@@ -6,7 +6,7 @@ import {
   computed,
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { MenuApi } from './menu-api';
+import { DayApi } from '../../api/day/day-api';
 
 @Component({
   selector: 'app-menu',
@@ -14,15 +14,15 @@ import { MenuApi } from './menu-api';
   templateUrl: './menu.html',
 })
 export class Menu {
-  private menuApi = inject(MenuApi);
+  private dayApi = inject(DayApi);
 
   @Output() menuOpen = new EventEmitter<boolean>();
 
   constructor() {
-    this.menuApi.loadDataIfNeeded();
+    this.dayApi.loadDataIfNeeded();
   }
 
-  routineDays = computed(() => this.menuApi.getMenuItemsSignal()());
+  routineDays = computed(() => this.dayApi.getDaysSignal()());
 
   toggleMenu() {
     setTimeout(() => {

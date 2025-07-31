@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { Exercise } from '../../pages/routine-details/routine-details-model';
-import { SoundApi } from '../../sound/sound-api';
+import { SoundApi } from '../../api/sound/sound-api';
 
 @Component({
   selector: 'app-exercise-item',

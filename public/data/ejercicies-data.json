@@ -1,0 +1,9 @@
+[
+  { "id": "1", "name": "Calentamiento" },
+  { "id": "2", "name": "Plancha" },
+  { "id": "3", "name": "Tríceps con mancuerna" },
+  { "id": "4", "name": "Sentadillas" },
+  { "id": "5", "name": "Dominadas en barra fija" },
+  { "id": "6", "name": "Curl de bíceps con mancuernas" },
+  { "id": "7", "name": "Abdominales" }
+]

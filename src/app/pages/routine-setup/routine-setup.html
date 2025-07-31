@@ -1,0 +1,17 @@
+<div
+  class="bg-red-50 shadow-md p-4 sm:rounded-none sm:h-full md:rounded-2xl md:max-w-xl md:mx-auto md:my-6 md:h-auto w-full h-screen overflow-auto transition-all"
+>
+  <h2 class="text-xl font-semibold text-center mb-4 text-red-700">
+    Configurar rutina
+  </h2>
+
+  <ul class="flex flex-col">
+    @for(day of routineDays(); track day.id) {
+    <li
+      class="flex items-center gap-2 w-full px-6 py-4 rounded-lg text-lg text-red-700 font-medium hover:bg-red-100 transition-all duration-200 border-b border-red-100"
+    >
+      {{ day.name }}
+    </li>
+    }
+  </ul>
+</div>

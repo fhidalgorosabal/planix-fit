@@ -1,17 +1,17 @@
 import { inject, Injectable, signal, Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MenuItem } from './menu-model';
+import { Day } from './day-model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MenuApi {
+export class DayApi {
   private httpClient = inject(HttpClient);
-  private readonly STORAGE_KEY = 'menu-items-cache';
+  private readonly STORAGE_KEY = 'days-cache';
 
-  private cache = signal<MenuItem[] | null>(null);
+  private cache = signal<Day[] | null>(null);
 
-  getMenuItemsSignal(): Signal<MenuItem[] | null> {
+  getDaysSignal(): Signal<Day[] | null> {
     return this.cache;
   }
 
@@ -21,7 +21,7 @@ export class MenuApi {
     const stored = localStorage.getItem(this.STORAGE_KEY);
     if (stored) {
       try {
-        const parsedData = JSON.parse(stored) as MenuItem[];
+        const parsedData = JSON.parse(stored) as Day[];
         this.cache.set(parsedData);
         return;
       } catch (e) {
@@ -30,22 +30,22 @@ export class MenuApi {
       }
     }
 
-    this.httpClient.get<MenuItem[]>('data/routine-days-data.json').subscribe({
+    this.httpClient.get<Day[]>('data/routine-days-data.json').subscribe({
       next: (data) => {
         this.cache.set(data);
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
       },
       error: (err) => {
-        console.error('Error cargando menú:', err);
+        console.error('Error cargando los días:', err);
         this.cache.set([]);
       },
     });
   }
 
-  refreshSignal(): Signal<MenuItem[]> {
+  refreshSignal(): Signal<Day[]> {
     localStorage.removeItem(this.STORAGE_KEY);
     this.cache.set(null);
     this.loadDataIfNeeded();
-    return this.getMenuItemsSignal() as Signal<MenuItem[]>;
+    return this.getDaysSignal() as Signal<Day[]>;
   }
 }

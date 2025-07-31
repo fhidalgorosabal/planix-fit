@@ -50,7 +50,7 @@
         "restTimeSet": 5
       },
       {
-        "id": "2",
+        "id": "5",
         "name": "Dominadas en barra fija",
         "reps": 12,
         "sets": 4,
@@ -58,7 +58,7 @@
         "restTimeSet": 120
       },
       {
-        "id": "3",
+        "id": "6",
         "name": "Curl de bíceps con mancuernas",
         "reps": 12,
         "sets": 3,
@@ -66,7 +66,7 @@
         "restTimeSet": 120
       },
       {
-        "id": "4",
+        "id": "7",
         "name": "Abdominales",
         "reps": 25,
         "sets": 3,
@@ -126,7 +126,7 @@
         "restTimeSet": 5
       },
       {
-        "id": "2",
+        "id": "5",
         "name": "Dominadas en barra fija",
         "reps": 12,
         "sets": 4,
@@ -134,7 +134,7 @@
         "restTimeSet": 120
       },
       {
-        "id": "3",
+        "id": "6",
         "name": "Curl de bíceps con mancuernas",
         "reps": 12,
         "sets": 3,
@@ -142,7 +142,7 @@
         "restTimeSet": 120
       },
       {
-        "id": "4",
+        "id": "7",
         "name": "Abdominales",
         "reps": 25,
         "sets": 3,

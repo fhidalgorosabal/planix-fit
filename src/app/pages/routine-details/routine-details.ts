@@ -9,7 +9,7 @@ import {
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { RoutineDetailsApi } from './routine-details-api';
-import { SoundApi } from '../../sound/sound-api';
+import { SoundApi } from '../../api/sound/sound-api';
 import { ExerciseItem } from '../../components/exercise-item/exercise-item';
 
 @Component({
