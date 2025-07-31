@@ -7,10 +7,11 @@ import {
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DayApi } from '../../api/day/day-api';
+import { IconComponent } from '../icons/icons';
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, IconComponent],
   templateUrl: './menu.html',
 })
 export class Menu {

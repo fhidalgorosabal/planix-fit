@@ -21,7 +21,10 @@
       </p>
     </div>
 
-    @if (!expanded()) { 🔽 } @else { 🔼 }
+    <div class="text-red-700">
+      @if (!expanded()) { <app-icon name="down" /> } @else {
+      <app-icon name="up" /> }
+    </div>
   </div>
 
   @if (expanded()) {
@@ -42,8 +45,8 @@
       </button>
     </div>
     } } @else {
-    <p class="text-green-600 font-semibold mt-2">
-      ✅ ¡Ejercicio completado! Pasa al siguiente.
+    <p class="flex items-center gap-2 text-green-600 font-semibold mt-2">
+      <app-icon name="check" /> ¡Ejercicio completado! Pasa al siguiente.
     </p>
     }
   </div>

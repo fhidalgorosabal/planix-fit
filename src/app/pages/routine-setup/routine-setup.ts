@@ -1,10 +1,10 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DayApi } from '../../api/day/day-api';
+import { IconComponent } from '../../components/icons/icons';
 
 @Component({
-  selector: 'app-routine-setup',
-  imports: [RouterLink],
+  imports: [RouterLink, IconComponent],
   templateUrl: './routine-setup.html',
 })
 export class RoutineSetup {

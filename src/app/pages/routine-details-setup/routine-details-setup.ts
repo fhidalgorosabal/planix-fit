@@ -1,11 +1,11 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { RoutineDetailsApi } from '../routine-details/routine-details-api';
+import { IconComponent } from '../../components/icons/icons';
 
 @Component({
-  selector: 'app-routine-details-setup',
-  imports: [DatePipe],
+  imports: [RouterLink, DatePipe, IconComponent],
   templateUrl: './routine-details-setup.html',
 })
 export class RoutineDetailsSetup {

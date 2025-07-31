@@ -11,11 +11,12 @@ import {
 import { NgClass } from '@angular/common';
 import { Exercise } from '../../pages/routine-details/routine-details-model';
 import { SoundApi } from '../../api/sound/sound-api';
+import { IconComponent } from '../icons/icons';
 
 @Component({
   selector: 'app-exercise-item',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, IconComponent],
   templateUrl: './exercise-item.html',
 })
 export class ExerciseItem implements OnInit {
