@@ -1,6 +1,5 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal, Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { MenuItem } from './menu-model';
 
 @Injectable({
@@ -10,40 +9,43 @@ export class MenuApi {
   private httpClient = inject(HttpClient);
   private readonly STORAGE_KEY = 'menu-items-cache';
 
-  private cache: MenuItem[] | null = null;
-  private subject = new BehaviorSubject<MenuItem[]>([]);
+  private cache = signal<MenuItem[] | null>(null);
 
-  getMenuItems(): Observable<MenuItem[]> {
-    if (this.cache) {
-      this.subject.next(this.cache);
-      return this.subject.asObservable();
-    }
+  getMenuItemsSignal(): Signal<MenuItem[] | null> {
+    return this.cache;
+  }
+
+  loadDataIfNeeded(): void {
+    if (this.cache()) return;
 
     const stored = localStorage.getItem(this.STORAGE_KEY);
     if (stored) {
-      this.cache = JSON.parse(stored);
-      this.cache && this.subject.next(this.cache);
-      return this.subject.asObservable();
+      try {
+        const parsedData = JSON.parse(stored) as MenuItem[];
+        this.cache.set(parsedData);
+        return;
+      } catch (e) {
+        console.error('Error al parsear datos del localStorage:', e);
+        localStorage.removeItem(this.STORAGE_KEY);
+      }
     }
 
     this.httpClient.get<MenuItem[]>('data/routine-days-data.json').subscribe({
       next: (data) => {
-        this.cache = data;
+        this.cache.set(data);
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
-        this.subject.next(data);
       },
       error: (err) => {
         console.error('Error cargando menú:', err);
-        this.subject.next([]);
+        this.cache.set([]);
       },
     });
-
-    return this.subject.asObservable();
   }
 
-  refresh(): Observable<MenuItem[]> {
+  refreshSignal(): Signal<MenuItem[]> {
     localStorage.removeItem(this.STORAGE_KEY);
-    this.cache = null;
-    return this.getMenuItems();
+    this.cache.set(null);
+    this.loadDataIfNeeded();
+    return this.getMenuItemsSignal() as Signal<MenuItem[]>;
   }
 }

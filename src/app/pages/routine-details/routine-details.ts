@@ -5,15 +5,12 @@ import {
   inject,
   OnDestroy,
   signal,
-  WritableSignal,
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
 import { RoutineDetailsApi } from './routine-details-api';
 import { SoundApi } from '../../sound/sound-api';
 import { ExerciseItem } from '../../components/exercise-item/exercise-item';
-import { Exercise } from './routine-details-model';
 
 @Component({
   standalone: true,
@@ -27,30 +24,24 @@ export class RoutineDetails implements OnDestroy {
   private soundApi = inject(SoundApi);
 
   day = signal('1');
-  exercises: WritableSignal<Exercise[]> = signal([]);
-
   currentExerciseIndex = signal(0);
   isGlobalResting = signal(false);
   globalCountdown = signal(10);
   private intervalId: any;
 
-  destroy$ = new Subject<void>();
-
   constructor() {
     effect(() => {
-      const dayValue = this.day();
-      this.routineDetailsApi
-        .getRoutineDetails(dayValue)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (data) => this.exercises.set(data ?? []),
-        });
-
       this.route.paramMap.subscribe((params) => {
-        this.day.set(params.get('day') || '1');
+        const newDay = params.get('day') || '1';
+        this.day.set(newDay);
+        this.routineDetailsApi.loadDataIfNeeded();
       });
     });
   }
+
+  exercises = computed(() =>
+    this.routineDetailsApi.getExercisesByDay(this.day())
+  );
 
   dayDate = computed(() => {
     const today = new Date();
@@ -88,7 +79,8 @@ export class RoutineDetails implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 }
