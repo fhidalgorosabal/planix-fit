@@ -1,7 +1,7 @@
 <div
   class="bg-red-50 shadow-md p-4 sm:rounded-none sm:h-full md:rounded-2xl md:max-w-xl md:mx-auto md:my-6 md:h-auto w-full h-screen overflow-auto transition-all"
 >
-  <div class="flex items-center">
+  <div class="flex items-center mb-6">
     <a [routerLink]="['/routine-setup']">
       <app-icon
         name="back"
@@ -11,5 +11,244 @@
     <h2 class="ml-6 text-xl font-semibold text-red-700">
       Configurar rutina del {{ dayDate() | date : "EEEE" }}
     </h2>
+  </div>
+
+  <div class="mb-6">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-red-700">Ejercicios</h3>
+      @if (!showAddForm()) {
+      <button
+        (click)="showAddExerciseForm()"
+        class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+      >
+        Añadir ejercicio
+      </button>
+      }
+    </div>
+
+    @if (showAddForm()) {
+    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+      <h4 class="text-lg font-medium text-red-700 mb-3">Nuevo ejercicio</h4>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Nombre</label
+          >
+          <input
+            type="text"
+            [(ngModel)]="newExercise.name"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Nombre del ejercicio"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Cantidad</label
+            >
+            <input
+              type="number"
+              [(ngModel)]="newExercise.reps"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+              min="1"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Series</label
+            >
+            <input
+              type="number"
+              [(ngModel)]="newExercise.sets"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+              min="1"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Unidad</label
+          >
+          <select
+            [(ngModel)]="newExercise.unit"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            <option value="">Repeticiones</option>
+            <option value="minutos">Minutos</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Descanso entre ejercicio</label
+            >
+            <input
+              type="number"
+              [(ngModel)]="newExercise.restTime"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+              min="0"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Descanso entre series</label
+            >
+            <input
+              type="number"
+              [(ngModel)]="newExercise.restTimeSet"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+              min="0"
+            />
+          </div>
+        </div>
+        <div class="flex justify-end space-x-3 mt-4">
+          <button
+            (click)="hideAddExerciseForm()"
+            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            (click)="addExercise()"
+            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </div>
+    } @if (exercises().length === 0) {
+    <p class="text-gray-500 text-center py-4">
+      No hay ejercicios configurados para este día.
+    </p>
+    } @else {
+    <ul class="space-y-3">
+      @for (exercise of exercises(); track exercise.id) {
+      <li class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+        @if (editingExercise() === null || editingExercise()?.id !==
+        exercise.id) {
+        <div>
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="font-medium text-red-700">{{ exercise.name }}</h4>
+              <p class="text-sm text-gray-600">
+                {{ exercise.reps }} {{ exercise.unit || "reps" }} •
+                {{ exercise.sets }}
+                {{ exercise.sets > 1 ? "series" : "serie" }}
+              </p>
+              <p class="text-xs text-gray-500 mt-1">
+                Descanso: {{ exercise.restTime }}s • Entre series:
+                {{ exercise.restTimeSet }}s
+              </p>
+            </div>
+            <div class="flex space-x-2">
+              <button
+                (click)="startEdit(exercise)"
+                class="text-blue-600 hover:text-blue-800"
+              >
+                <app-icon name="edit" class="w-5 h-5" />
+              </button>
+              <button
+                (click)="deleteExercise(exercise.id)"
+                class="text-red-600 hover:text-red-800"
+              >
+                <app-icon name="delete" class="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+        } @if (editingExercise() !== null && editingExercise()?.id ===
+        exercise.id) {
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Nombre</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="editingExercise()!.name"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Cantidad</label
+              >
+              <input
+                type="number"
+                [(ngModel)]="editingExercise()!.reps"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                min="1"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Series</label
+              >
+              <input
+                type="number"
+                [(ngModel)]="editingExercise()!.sets"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                min="1"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Unidad</label
+            >
+            <select
+              [(ngModel)]="editingExercise()!.unit"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              <option value="">Repeticiones</option>
+              <option value="minutos">Minutos</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Descanso entre ejercicio</label
+              >
+              <input
+                type="number"
+                [(ngModel)]="editingExercise()!.restTime"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                min="0"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Descanso entre series</label
+              >
+              <input
+                type="number"
+                [(ngModel)]="editingExercise()!.restTimeSet"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                min="0"
+              />
+            </div>
+          </div>
+          <div class="flex justify-end space-x-3 mt-4">
+            <button
+              (click)="cancelEdit()"
+              class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              (click)="saveExercise()"
+              class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+            >
+              Guardar
+            </button>
+          </div>
+        </div>
+        }
+      </li>
+      }
+    </ul>
+    }
   </div>
 </div>
