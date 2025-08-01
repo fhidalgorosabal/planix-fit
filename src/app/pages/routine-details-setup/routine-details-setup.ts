@@ -1,14 +1,14 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { RoutineDetailsApi } from '../routine-details/routine-details-api';
 import { DayApi } from '../../api/day/day-api';
 import { IconComponent } from '../../components/icons/icons';
 import { Exercise } from '../routine-details/routine-details-model';
+import { ExerciseForm } from '../../components/exercise-form/exercise-form';
 
 @Component({
-  imports: [RouterLink, IconComponent, FormsModule, NgSelectModule],
+  imports: [RouterLink, IconComponent, FormsModule, ExerciseForm],
   templateUrl: './routine-details-setup.html',
 })
 export class RoutineDetailsSetup {
