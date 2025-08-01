@@ -1,13 +1,14 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { RoutineDetailsApi } from '../routine-details/routine-details-api';
 import { DayApi } from '../../api/day/day-api';
 import { IconComponent } from '../../components/icons/icons';
 import { Exercise } from '../routine-details/routine-details-model';
 
 @Component({
-  imports: [RouterLink, IconComponent, FormsModule],
+  imports: [RouterLink, IconComponent, FormsModule, NgSelectModule],
   templateUrl: './routine-details-setup.html',
 })
 export class RoutineDetailsSetup {
@@ -18,6 +19,10 @@ export class RoutineDetailsSetup {
   day = signal('1');
   exercises = computed(() =>
     this.routineDetailsApi.getExercisesByDay(this.day())
+  );
+
+  exercicesBase = computed(() =>
+    this.routineDetailsApi.getCachedExercisesBase()
   );
 
   editingExercise = signal<Exercise | null>(null);
