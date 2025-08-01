@@ -1,29 +1,28 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { RoutineDetailsApi } from '../routine-details/routine-details-api';
+import { DayApi } from '../../api/day/day-api';
 import { IconComponent } from '../../components/icons/icons';
 import { Exercise } from '../routine-details/routine-details-model';
-import { FormsModule } from '@angular/forms';
 
 @Component({
-  imports: [RouterLink, DatePipe, IconComponent, FormsModule],
+  imports: [RouterLink, IconComponent, FormsModule],
   templateUrl: './routine-details-setup.html',
 })
 export class RoutineDetailsSetup {
   private route = inject(ActivatedRoute);
   private routineDetailsApi = inject(RoutineDetailsApi);
+  private dayApi = inject(DayApi);
 
   day = signal('1');
   exercises = computed(() =>
     this.routineDetailsApi.getExercisesByDay(this.day())
   );
 
-  // Estado para el formulario de edición
   editingExercise = signal<Exercise | null>(null);
   showAddForm = signal(false);
 
-  // Nuevo ejercicio
   newExercise: Exercise = {
     id: '',
     name: '',
@@ -45,12 +44,7 @@ export class RoutineDetailsSetup {
   }
 
   dayDate = computed(() => {
-    const today = new Date();
-    return new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      parseInt(this.day(), 10) - 1
-    );
+    return this.dayApi.getDayName(Number(this.day()));
   });
 
   startEdit(exercise: Exercise): void {

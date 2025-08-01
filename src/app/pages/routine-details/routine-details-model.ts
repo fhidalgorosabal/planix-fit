@@ -1,6 +1,8 @@
-export interface Exercise {
+export interface ExerciseBase {
   id: string;
   name: string;
+}
+export interface Exercise extends ExerciseBase {
   reps: number;
   sets: number;
   unit?: string;

@@ -62,6 +62,24 @@ export class DayApi {
     this.cache.set(updatedDays);
   }
 
+  getDayName(id: number): string {
+    const dayName = [
+      'Lunes', // 1
+      'Martes', // 2
+      'Miércoles', // 3
+      'Jueves', // 4
+      'Viernes', // 5
+      'Sábado', // 6
+      'Domingo', // 7
+    ];
+
+    if (id < 1 || id > 7) {
+      throw new Error('El día debe estar entre 1 (Lunes) y 7 (Domingo).');
+    }
+
+    return dayName[id - 1];
+  }
+
   refreshSignal(): Signal<Day[]> {
     localStorage.removeItem(this.STORAGE_KEY);
     this.cache.set(null);

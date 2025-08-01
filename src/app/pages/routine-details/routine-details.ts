@@ -6,21 +6,22 @@ import {
   OnDestroy,
   signal,
 } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { RoutineDetailsApi } from './routine-details-api';
-import { SoundApi } from '../../api/sound/sound-api';
 import { ExerciseItem } from '../../components/exercise-item/exercise-item';
+import { DayApi } from '../../api/day/day-api';
+import { SoundApi } from '../../api/sound/sound-api';
 
 @Component({
   standalone: true,
   selector: 'app-routine-details',
-  imports: [DatePipe, ExerciseItem],
+  imports: [ExerciseItem],
   templateUrl: './routine-details.html',
 })
 export class RoutineDetails implements OnDestroy {
   private route = inject(ActivatedRoute);
   private routineDetailsApi = inject(RoutineDetailsApi);
+  private dayApi = inject(DayApi);
   private soundApi = inject(SoundApi);
 
   day = signal('1');
@@ -44,12 +45,7 @@ export class RoutineDetails implements OnDestroy {
   );
 
   dayDate = computed(() => {
-    const today = new Date();
-    return new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      parseInt(this.day(), 10) - 1
-    );
+    return this.dayApi.getDayName(Number(this.day()));
   });
 
   onExerciseCompleted() {
