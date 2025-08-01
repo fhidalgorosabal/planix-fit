@@ -64,13 +64,13 @@ export class DayApi {
 
   getDayName(id: number): string {
     const dayName = [
-      'Lunes', // 1
-      'Martes', // 2
-      'Miércoles', // 3
-      'Jueves', // 4
-      'Viernes', // 5
-      'Sábado', // 6
-      'Domingo', // 7
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+      'Domingo',
     ];
 
     if (id < 1 || id > 7) {
