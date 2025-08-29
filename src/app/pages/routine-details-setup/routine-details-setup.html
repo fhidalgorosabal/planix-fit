@@ -19,7 +19,7 @@
       @if (!showAddForm()) {
       <button
         (click)="showAddExerciseForm()"
-        class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+        class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors cursor-pointer"
       >
         Añadir ejercicio
       </button>
@@ -64,13 +64,13 @@
             <div class="flex space-x-2">
               <button
                 (click)="startEdit(exercise)"
-                class="text-blue-600 hover:text-blue-800"
+                class="text-blue-600 hover:text-blue-800 cursor-pointer"
               >
                 <app-icon name="edit" class="w-5 h-5" />
               </button>
               <button
                 (click)="deleteExercise(exercise.id)"
-                class="text-red-600 hover:text-red-800"
+                class="text-red-600 hover:text-red-800 cursor-pointer"
               >
                 <app-icon name="delete" class="w-5 h-5" />
               </button>
