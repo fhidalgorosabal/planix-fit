@@ -30,14 +30,14 @@ export class ExerciseItem implements OnInit {
   currentSet = signal(1);
   isResting = signal(false);
 
-  restTime = 0;
-  countdown = signal(this.restTime);
+  rest_time = 0;
+  countdown = signal(this.rest_time);
   intervalId: any;
 
   isCompleted = computed(() => this.currentSet() > this.exercise.sets);
 
   ngOnInit(): void {
-    this.restTime = this.exercise?.restTime || 60;
+    this.rest_time = this.exercise?.rest_time || 60;
   }
 
   toggleExpand() {
@@ -50,8 +50,8 @@ export class ExerciseItem implements OnInit {
 
     if (this.currentSet() < this.exercise.sets) {
       this.isResting.set(true);
-      this.countdown.set(this.restTime);
-      this.startRestTimer();
+      this.countdown.set(this.rest_time);
+      this.startrest_timer();
     } else {
       this.currentSet.update((v) => v + 1);
     }
@@ -61,7 +61,7 @@ export class ExerciseItem implements OnInit {
     }
   }
 
-  private startRestTimer() {
+  private startrest_timer() {
     this.intervalId = setInterval(() => {
       this.countdown.update((n) => n - 1);
       if (this.countdown() <= 0) {

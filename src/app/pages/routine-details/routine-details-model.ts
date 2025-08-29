@@ -6,8 +6,8 @@ export interface Exercise extends ExerciseBase {
   reps: number;
   sets: number;
   unit?: string;
-  restTime: number;
-  restTimeSet: number;
+  rest_time: number;
+  rest_time_set: number;
 }
 
 export interface DayRoutine {

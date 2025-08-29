@@ -1,7 +1,7 @@
 import { inject, Injectable, signal, Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Day } from './day-model';
 import { environment } from '../environment';
+import { Day } from './day-model';
 
 @Injectable({
   providedIn: 'root',

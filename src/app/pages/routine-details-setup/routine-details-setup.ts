@@ -34,8 +34,8 @@ export class RoutineDetailsSetup {
     reps: 10,
     sets: 3,
     unit: '',
-    restTime: 60,
-    restTimeSet: 120,
+    rest_time: 60,
+    rest_time_set: 120,
   };
 
   constructor() {
@@ -101,8 +101,8 @@ export class RoutineDetailsSetup {
       reps: 10,
       sets: 3,
       unit: '',
-      restTime: 60,
-      restTimeSet: 120,
+      rest_time: 60,
+      rest_time_set: 120,
     };
   }
 }

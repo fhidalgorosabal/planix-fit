@@ -52,10 +52,10 @@ export class RoutineDetails implements OnDestroy {
     const nextIndex = this.currentExerciseIndex() + 1;
     if (nextIndex < this.exercises().length) {
       this.isGlobalResting.set(true);
-      const restTimeSet =
-        this.exercises()[this.currentExerciseIndex()].restTimeSet || 120;
-      this.globalCountdown.set(restTimeSet);
-      this.startGlobalRestTimer(() => {
+      const rest_time_set =
+        this.exercises()[this.currentExerciseIndex()].rest_time_set || 120;
+      this.globalCountdown.set(rest_time_set);
+      this.startGlobalrest_timer(() => {
         this.isGlobalResting.set(false);
         this.currentExerciseIndex.set(nextIndex);
         this.soundApi.play('sounds/sound-1.mp3', 3);
@@ -63,7 +63,7 @@ export class RoutineDetails implements OnDestroy {
     }
   }
 
-  private startGlobalRestTimer(callback: () => void) {
+  private startGlobalrest_timer(callback: () => void) {
     clearInterval(this.intervalId);
     this.intervalId = setInterval(() => {
       this.globalCountdown.update((n) => n - 1);

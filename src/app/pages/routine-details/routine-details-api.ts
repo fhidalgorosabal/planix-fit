@@ -1,186 +1,202 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { forkJoin, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { environment } from '../../api/environment';
 import { DayRoutine, Exercise, ExerciseBase } from './routine-details-model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoutineDetailsApi {
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
+
   private readonly ROUTINE_STORAGE_KEY = 'routine-details-cache';
   private readonly EXERCISE_STORAGE_KEY = 'exercise-base-cache';
 
-  private routineCache = signal<DayRoutine[] | null>(null);
-  private exerciseBaseCache = signal<ExerciseBase[] | null>(null);
+  private readonly routineCache = signal<DayRoutine[] | null>(null);
+  private readonly exerciseBaseCache = signal<ExerciseBase[] | null>(null);
+
+  private getHeaders(): Record<string, string> {
+    return {
+      apikey: environment.supabaseKey,
+      Authorization: `Bearer ${environment.supabaseKey}`,
+      'Content-Type': 'application/json',
+    };
+  }
 
   getExercisesByDay(day: string): Exercise[] {
-    const currentCache = this.routineCache();
-    if (!currentCache || !day) return [];
-    return currentCache.find((routine) => routine.day === day)?.list || [];
+    return this.getDayRoutine(day)?.list ?? [];
   }
 
   getDayRoutine(day: string): DayRoutine | undefined {
-    const currentCache = this.routineCache();
-    if (!currentCache || !day) return undefined;
-    return currentCache.find((routine) => routine.day === day);
+    const cache = this.routineCache();
+    return day && cache ? cache.find((r) => r.day === day) : undefined;
   }
 
   getCachedExercisesBase(): ExerciseBase[] {
-    return this.exerciseBaseCache() || [];
+    return this.exerciseBaseCache() ?? [];
   }
 
   getLastExerciseId(): number {
-    const all = this.routineCache() || [];
-    const ids = all.flatMap((r) => r.list.map((ex) => parseInt(ex.id, 10)));
-    const maxId = ids.length ? Math.max(...ids) : 0;
-    return maxId;
+    const allExercises =
+      this.routineCache()?.flatMap((r) =>
+        r.list.map((ex) => parseInt(ex.id, 10))
+      ) ?? [];
+    return allExercises.length ? Math.max(...allExercises) : 0;
   }
 
-  refreshSignal(day: string) {
+  refreshSignal(day: string): Exercise[] {
     localStorage.removeItem(this.ROUTINE_STORAGE_KEY);
     this.routineCache.set(null);
     this.loadDataIfNeeded();
-    return signal<Exercise[]>(this.getExercisesByDay(day));
+    return this.getExercisesByDay(day);
   }
 
   updateExercise(day: string, exercise: Exercise): boolean {
-    this.loadDataIfNeeded();
-    const currentCache = this.routineCache();
-    if (!currentCache) return false;
+    const url = `${environment.supabaseUrl}/routine_exercises?id=eq.${exercise.id}`;
+    this.httpClient
+      .patch(
+        url,
+        {
+          reps: exercise.reps,
+          sets: exercise.sets,
+          unit: exercise.unit,
+          rest_time: exercise.rest_time,
+          rest_time_set: exercise.rest_time_set,
+        },
+        { headers: { ...this.getHeaders(), Prefer: 'return=representation' } }
+      )
+      .pipe(
+        catchError((err) => {
+          console.error('Error actualizando ejercicio:', err);
+          return of(null);
+        }),
+        tap(() => this.loadRoutineAndExercises())
+      )
+      .subscribe();
 
-    const updatedCache = currentCache.map((routine) => {
-      if (routine.day === day) {
-        const updatedList = routine.list.map((ex) =>
-          ex.id === exercise.id ? exercise : ex
-        );
-        return { ...routine, list: updatedList };
-      }
-      return routine;
-    });
-
-    this.routineCache.set(updatedCache);
-    localStorage.setItem(
-      this.ROUTINE_STORAGE_KEY,
-      JSON.stringify(updatedCache)
-    );
     return true;
   }
 
   addExercise(day: string, exercise: Exercise): boolean {
-    this.loadDataIfNeeded();
-    const currentCache = this.routineCache();
-    if (!currentCache) return false;
+    const routineId = parseInt(day, 10);
+    const url = `${environment.supabaseUrl}/routine_exercises`;
 
-    const dayExists = currentCache.some((routine) => routine.day === day);
-    let updatedCache;
+    this.httpClient
+      .post(
+        url,
+        {
+          routine_id: routineId,
+          exercise_id: this.getLastExerciseId() + 1,
+          reps: exercise.reps,
+          sets: exercise.sets,
+          unit: exercise.unit,
+          rest_time: exercise.rest_time,
+          rest_time_set: exercise.rest_time_set,
+        },
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        catchError((err) => {
+          console.error('Error agregando ejercicio:', err);
+          return of(null);
+        }),
+        tap(() => this.loadRoutineAndExercises())
+      )
+      .subscribe();
 
-    if (dayExists) {
-      updatedCache = currentCache.map((routine) => {
-        if (routine.day === day) {
-          const maxId = Math.max(
-            ...routine.list.map((ex) => parseInt(ex.id, 10)),
-            0
-          );
-          const newExercise = { ...exercise, id: (maxId + 1).toString() };
-          return { ...routine, list: [...routine.list, newExercise] };
-        }
-        return routine;
-      });
-    } else {
-      const newRoutine: DayRoutine = {
-        day,
-        list: [{ ...exercise, id: (this.getLastExerciseId() + 1).toString() }],
-      };
-      updatedCache = [...currentCache, newRoutine];
-    }
-
-    this.routineCache.set(updatedCache);
-    localStorage.setItem(
-      this.ROUTINE_STORAGE_KEY,
-      JSON.stringify(updatedCache)
-    );
     return true;
   }
 
   deleteExercise(day: string, exerciseId: string): boolean {
-    const currentCache = this.routineCache();
-    if (!currentCache) return false;
+    const url = `${environment.supabaseUrl}/routine_exercises?id=eq.${exerciseId}`;
+    this.httpClient
+      .delete(url, { headers: this.getHeaders() })
+      .pipe(
+        catchError((err) => {
+          console.error('Error eliminando ejercicio:', err);
+          return of(null);
+        }),
+        tap(() => this.loadRoutineAndExercises())
+      )
+      .subscribe();
 
-    const updatedCache = currentCache.map((routine) => {
-      if (routine.day === day) {
-        const updatedList = routine.list.filter((ex) => ex.id !== exerciseId);
-        return { ...routine, list: updatedList };
-      }
-      return routine;
-    });
-
-    this.routineCache.set(updatedCache);
-    localStorage.setItem(
-      this.ROUTINE_STORAGE_KEY,
-      JSON.stringify(updatedCache)
-    );
     return true;
   }
 
   loadDataIfNeeded(): void {
-    if (!this.routineCache()) {
-      this.loadRoutineCache();
-    }
-
-    if (!this.exerciseBaseCache()) {
-      this.loadExerciseBaseCache();
+    if (!this.routineCache() || !this.exerciseBaseCache()) {
+      this.loadRoutineAndExercises();
     }
   }
 
-  private loadRoutineCache(): void {
-    const stored = localStorage.getItem(this.ROUTINE_STORAGE_KEY);
-    if (stored) {
-      try {
-        const parsedData = JSON.parse(stored) as DayRoutine[];
-        this.routineCache.set(parsedData);
-        return;
-      } catch (e) {
-        console.error('Error al parsear rutina:', e);
-        localStorage.removeItem(this.ROUTINE_STORAGE_KEY);
-      }
-    }
+  private loadRoutineAndExercises(): void {
+    const routine$ = this.httpClient
+      .get<any[]>(`${environment.supabaseUrl}/routine_exercises`, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(() => of([])));
 
-    this.httpClient
-      .get<DayRoutine[]>('data/routine-details-data.json')
-      .subscribe({
-        next: (data) => {
-          this.routineCache.set(data);
-          localStorage.setItem(this.ROUTINE_STORAGE_KEY, JSON.stringify(data));
-        },
-        error: (err) => {
-          console.error('Error cargando rutina:', err);
-          this.routineCache.set([]);
-        },
-      });
+    const exercises$ = this.httpClient
+      .get<ExerciseBase[]>(`${environment.supabaseUrl}/exercises`, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(() => of([])));
+
+    forkJoin([routine$, exercises$])
+      .pipe(
+        tap(([routineData, exercisesData]) => {
+          this.setExerciseCache(exercisesData);
+          this.setRoutineCache(this.mapRoutineData(routineData, exercisesData));
+        })
+      )
+      .subscribe();
   }
 
-  private loadExerciseBaseCache(): void {
-    const stored = localStorage.getItem(this.EXERCISE_STORAGE_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored) as ExerciseBase[];
-        this.exerciseBaseCache.set(parsed);
-        return;
-      } catch (e) {
-        console.error('Error al parsear ejercicios base:', e);
-        localStorage.removeItem(this.EXERCISE_STORAGE_KEY);
+  private setExerciseCache(exercises: ExerciseBase[]): void {
+    this.exerciseBaseCache.set(exercises);
+    localStorage.setItem(this.EXERCISE_STORAGE_KEY, JSON.stringify(exercises));
+  }
+
+  private setRoutineCache(routine: DayRoutine[]): void {
+    const sorted = routine.sort((a, b) => parseInt(a.day) - parseInt(b.day));
+    this.routineCache.set(sorted);
+    localStorage.setItem(this.ROUTINE_STORAGE_KEY, JSON.stringify(sorted));
+  }
+
+  private mapRoutineData(
+    routineData: any[],
+    exercisesData: ExerciseBase[]
+  ): DayRoutine[] {
+    const mapped: DayRoutine[] = [];
+
+    for (const item of routineData) {
+      const dayStr = item.routine_id.toString();
+      let dayRoutine = mapped.find((d) => d.day === dayStr);
+
+      if (!dayRoutine) {
+        dayRoutine = { day: dayStr, list: [] };
+        mapped.push(dayRoutine);
+      }
+
+      const exerciseInfo = exercisesData.find(
+        (ex) => ex.id === item.exercise_id
+      );
+
+      if (exerciseInfo) {
+        dayRoutine.list.push({
+          id: item.id.toString(),
+          name: exerciseInfo.name,
+          reps: item.reps,
+          sets: item.sets,
+          unit: item.unit,
+          rest_time: item.rest_time,
+          rest_time_set: item.rest_time_set,
+        });
       }
     }
 
-    this.httpClient.get<ExerciseBase[]>('data/exercises-data.json').subscribe({
-      next: (data) => {
-        this.exerciseBaseCache.set(data);
-        localStorage.setItem(this.EXERCISE_STORAGE_KEY, JSON.stringify(data));
-      },
-      error: (err) => {
-        console.error('Error cargando ejercicios base:', err);
-        this.exerciseBaseCache.set([]);
-      },
-    });
+    return mapped;
   }
 }
