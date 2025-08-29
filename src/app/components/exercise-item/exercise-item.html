@@ -1,5 +1,5 @@
 <li
-  (click)="!isGlobalResting && toggleExpand()"
+  (click)="onToggle()"
   class="py-3 flex flex-col cursor-pointer border-b border-gray-200"
   [class.opacity-50]="isGlobalResting"
 >
@@ -22,12 +22,12 @@
     </div>
 
     <div class="text-red-700">
-      @if (!expanded()) { <app-icon name="down" /> } @else {
+      @if (!isExpanded) { <app-icon name="down" /> } @else {
       <app-icon name="up" /> }
     </div>
   </div>
 
-  @if (expanded()) {
+  @if (isExpanded) {
   <div class="mt-4 pl-2 pr-4 text-sm text-gray-700">
     @if (!isCompleted()) { @if (isResting()) {
     <div class="text-blue-500 font-semibold mt-2">
@@ -37,7 +37,7 @@
     <div class="flex items-center justify-between">
       <p>🏋️ Comienza la serie {{ currentSet() }} de {{ exercise.sets }}</p>
       <button
-        (click)="!isGlobalResting && completeSet(); $event.stopPropagation()"
+        (click)="completeSet(); $event.stopPropagation()"
         class="bg-red-200 text-red-900 px-4 py-1 rounded shadow hover:bg-red-300 disabled:opacity-50 cursor-pointer"
         [disabled]="isGlobalResting"
       >

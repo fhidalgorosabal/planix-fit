@@ -28,6 +28,7 @@ export class RoutineDetails implements OnDestroy {
   currentExerciseIndex = signal(0);
   isGlobalResting = signal(false);
   globalCountdown = signal(10);
+  expandedExerciseId: string | null = null;
   private intervalId: any;
 
   constructor() {
@@ -52,10 +53,10 @@ export class RoutineDetails implements OnDestroy {
     const nextIndex = this.currentExerciseIndex() + 1;
     if (nextIndex < this.exercises().length) {
       this.isGlobalResting.set(true);
-      const rest_time_set =
+      const restTimeSet =
         this.exercises()[this.currentExerciseIndex()].rest_time_set || 120;
-      this.globalCountdown.set(rest_time_set);
-      this.startGlobalrest_timer(() => {
+      this.globalCountdown.set(restTimeSet);
+      this.startGlobalRestTimer(() => {
         this.isGlobalResting.set(false);
         this.currentExerciseIndex.set(nextIndex);
         this.soundApi.play('sounds/sound-1.mp3', 3);
@@ -63,7 +64,7 @@ export class RoutineDetails implements OnDestroy {
     }
   }
 
-  private startGlobalrest_timer(callback: () => void) {
+  private startGlobalRestTimer(callback: () => void) {
     clearInterval(this.intervalId);
     this.intervalId = setInterval(() => {
       this.globalCountdown.update((n) => n - 1);
@@ -72,6 +73,12 @@ export class RoutineDetails implements OnDestroy {
         callback();
       }
     }, 1000);
+  }
+
+  toggleExpand(exerciseId: string) {
+    // Solo un ejercicio puede estar expandido a la vez
+    this.expandedExerciseId =
+      this.expandedExerciseId === exerciseId ? null : exerciseId;
   }
 
   ngOnDestroy(): void {

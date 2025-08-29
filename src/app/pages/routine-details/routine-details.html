@@ -17,6 +17,8 @@
       [exercise]="exercise"
       [isGlobalResting]="isGlobalResting()"
       (exerciseCompleted)="onExerciseCompleted()"
+      [isExpanded]="expandedExerciseId === exercise.id"
+      (toggleExpand)="toggleExpand(exercise.id)"
     />
     }
   </ul>

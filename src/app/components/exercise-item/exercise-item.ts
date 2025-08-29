@@ -24,25 +24,25 @@ export class ExerciseItem implements OnInit {
 
   @Input({ required: true }) exercise!: Exercise;
   @Input() isGlobalResting: boolean = false;
+  @Input() isExpanded: boolean = false;
   @Output() exerciseCompleted = new EventEmitter<void>();
+  @Output() toggleExpand = new EventEmitter<void>();
 
-  expanded = signal(false);
   currentSet = signal(1);
   isResting = signal(false);
-
-  rest_time = 0;
-  countdown = signal(this.rest_time);
-  intervalId: any;
+  restTime = 0;
+  countdown = signal(this.restTime);
+  private intervalId: any;
 
   isCompleted = computed(() => this.currentSet() > this.exercise.sets);
 
   ngOnInit(): void {
-    this.rest_time = this.exercise?.rest_time || 60;
+    this.restTime = this.exercise?.rest_time || 60;
   }
 
-  toggleExpand() {
+  onToggle() {
     if (this.isGlobalResting) return;
-    this.expanded.update((v) => !v);
+    this.toggleExpand.emit();
   }
 
   completeSet() {
@@ -50,8 +50,8 @@ export class ExerciseItem implements OnInit {
 
     if (this.currentSet() < this.exercise.sets) {
       this.isResting.set(true);
-      this.countdown.set(this.rest_time);
-      this.startrest_timer();
+      this.countdown.set(this.restTime);
+      this.startRestTimer();
     } else {
       this.currentSet.update((v) => v + 1);
     }
@@ -61,7 +61,7 @@ export class ExerciseItem implements OnInit {
     }
   }
 
-  private startrest_timer() {
+  private startRestTimer() {
     this.intervalId = setInterval(() => {
       this.countdown.update((n) => n - 1);
       if (this.countdown() <= 0) {
