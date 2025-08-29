@@ -21,7 +21,7 @@
         <app-icon name="home" /> Inicio
       </a>
     </li>
-    @for(day of routineDays(); track day.id) { @if (day.isActive) {
+    @for(day of routineDays(); track day.id) { @if (day.is_active) {
     <li (click)="toggleMenu()">
       <a
         [routerLink]="['/routine-details', day.id]"

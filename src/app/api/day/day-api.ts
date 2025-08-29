@@ -1,6 +1,7 @@
 import { inject, Injectable, signal, Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Day } from './day-model';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,30 @@ export class DayApi {
   private readonly STORAGE_KEY = 'days-cache';
 
   private cache = signal<Day[] | null>(null);
+
+  private getHeaders() {
+    return {
+      apikey: environment.supabaseKey,
+      Authorization: `Bearer ${environment.supabaseKey}`,
+      'Content-Type': 'application/json',
+    };
+  }
+
+  getDays() {
+    this.httpClient
+      .get<Day[]>(`${environment.supabaseUrl}/days`, {
+        headers: this.getHeaders(),
+      })
+      .subscribe({
+        next: (data) => {
+          this.cache.set(data.sort((a, b) => a.id - b.id));
+          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+        },
+        error: (err) => {
+          console.error('Error cargando los días desde base de datos:', err);
+        },
+      });
+  }
 
   getDaysSignal(): Signal<Day[] | null> {
     return this.cache;
@@ -30,36 +55,41 @@ export class DayApi {
       }
     }
 
-    this.httpClient.get<Day[]>('data/routine-days-data.json').subscribe({
-      next: (data) => {
-        this.cache.set(data);
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
-      },
-      error: (err) => {
-        console.error('Error cargando los días:', err);
-        this.cache.set([]);
-      },
-    });
+    this.getDays();
   }
 
   toggleDayActive(dayId: number): void {
-    const stored = localStorage.getItem(this.STORAGE_KEY);
-    if (!stored) return;
+    const currentDays = this.cache();
+    if (!currentDays) return;
 
-    let days: Day[];
-    try {
-      days = JSON.parse(stored) as Day[];
-    } catch (e) {
-      console.error('Error al parsear datos del localStorage:', e);
-      return;
-    }
+    const dayToUpdate = currentDays.find((d) => d.id === dayId);
+    if (!dayToUpdate) return;
 
-    const updatedDays = days.map((day) =>
-      day.id === dayId ? { ...day, isActive: !day.isActive } : day
-    );
+    const updated = { ...dayToUpdate, is_active: !dayToUpdate.is_active };
 
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedDays));
-    this.cache.set(updatedDays);
+    this.httpClient
+      .patch(
+        `${environment.supabaseUrl}/days?id=eq.${dayId}`,
+        { is_active: updated.is_active },
+        {
+          headers: {
+            ...this.getHeaders(),
+            Prefer: 'return=representation',
+          },
+        }
+      )
+      .subscribe({
+        next: () => {
+          const updatedDays = currentDays.map((day) =>
+            day.id === dayId ? updated : day
+          );
+          this.cache.set(updatedDays);
+          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedDays));
+        },
+        error: (err) => {
+          console.error('Error actualizando día en base de datos:', err);
+        },
+      });
   }
 
   getDayName(id: number): string {

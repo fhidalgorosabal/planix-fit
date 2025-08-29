@@ -16,7 +16,7 @@
           type="checkbox"
           [name]="day.name"
           [id]="day.id"
-          [checked]="day.isActive"
+          [checked]="day.is_active"
           (change)="toggleDay(day.id)"
         />
         <label [for]="day.id">{{ day.name }}</label>

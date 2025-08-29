@@ -1,5 +1,5 @@
 export interface Day {
   id: number;
   name: string;
-  isActive: boolean;
+  is_active: boolean;
 }
