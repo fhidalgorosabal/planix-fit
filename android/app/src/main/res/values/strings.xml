@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8' ?>
 <resources>
-    <string name="app_name">planix-fit</string>
-    <string name="title_activity_main">planix-fit</string>
+    <string name="app_name">PlanixFit</string>
+    <string name="title_activity_main">PlanixFit</string>
     <string name="package_name">com.fernandev.planixfit</string>
     <string name="custom_url_scheme">com.fernandev.planixfit</string>
 </resources>
